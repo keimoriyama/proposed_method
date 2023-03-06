@@ -6,6 +6,7 @@ from transformers import RobertaConfig, RobertaModel
 
 from model.modelinterface import ModelInterface
 
+device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
 
 class ConvolutionModel(ModelInterface):
     def __init__(
@@ -28,7 +29,7 @@ class ConvolutionModel(ModelInterface):
         self.config = RobertaConfig.from_pretrained("./model/config.json")
         self.bert = RobertaModel(config=self.config)
         if load_bert:
-            self.bert.load_state_dict(torch.load("./model/bert_model.pth"))
+            self.bert.load_state_dict(torch.load("./model/bert_model.pth",map_location=torch.device(device)))
         self.kernel_size = kernel_size
         self.stride = stride
         self.flatten = nn.Flatten()
