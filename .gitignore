@@ -1,0 +1,6 @@
+mlruns
+model/*
+data/*
+!data.csv
+.DS_Store
+*.pyc
