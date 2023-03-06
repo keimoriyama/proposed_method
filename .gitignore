@@ -1,6 +1,6 @@
 mlruns
 model/*
 data/*
-!data.csv
+!train_data.csv
 .DS_Store
 *.pyc
