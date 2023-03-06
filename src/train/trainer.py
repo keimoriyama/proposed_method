@@ -1,7 +1,6 @@
 import pytorch_lightning as pl
 import torch
-from torchmetrics import F1Score
-from torchmetrics.functional import precision_recall
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 torch.autograd.set_detect_anomaly(True)
 
@@ -13,7 +12,6 @@ class ModelTrainer(pl.LightningModule):
         self.model = model
         self.softmax = torch.nn.Softmax(dim=1)
         self.params = self.model.parameters()
-        self.f1 = F1Score()
         self.lr = learning_rate
         self.path = save_path
         self.min_valid_loss = 1e1000
@@ -205,11 +203,10 @@ class ModelTrainer(pl.LightningModule):
         loss = torch.mean(loss)
         return loss
 
-    def calc_metrics(self, answer, result):
-        acc = sum(answer == result) / len(answer)
-        precision, recall = precision_recall(result, answer)
-        acc = acc.item()
-        precision = precision.item()
-        recall = recall.item()
-        f1 = self.f1(result, answer)
-        return (acc, precision, recall, f1)
+    def calc_metrics(self, ans, result):
+        acc = accuracy_score(ans, result)
+        pre = precision_score(ans, result, zero_division=0)
+        recall = recall_score(ans, result)
+        f1 = f1_score(ans, result)
+
+        return (acc, pre, recall, f1)
