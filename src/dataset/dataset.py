@@ -22,7 +22,7 @@ class Dataset(Dataset):
         correct = d["correct"]
         system_out = d["system_out"]
         attribute = d["attribute"]
-        text = ["<s>"] + text + ["</s>"]
+        text = ["<s>"] + text + ["[SEP]"] + attribute + ["</s>"]
         attention_mask = [0] * len(text)
 
         start_idx = 0
@@ -32,18 +32,17 @@ class Dataset(Dataset):
         attention_mask = self.padding(attention_mask, 0, self.num_tokens)
 
         token_id = [self.vocab.get(token, self.vocab["<unk>"]) for token in text]
-
         return {
             "text": text,
-            "attribute": attribute,
+            "attribute": "".join(attribute),
             "system_dicision": system_dicision,
             "crowd_dicision": crowd_dicision,
             "correct": correct,
             "system_out": system_out,
             "tokens": torch.LongTensor(token_id),
             "attention_mask": torch.LongTensor(attention_mask),
-            "start_idx": start_idx,
-            "end_idx": end_idx,
+            # "start_idx": start_idx,
+            # "end_idx": end_idx,
         }
 
     def preprocess(self, data):

@@ -1,6 +1,7 @@
 import pytorch_lightning as pl
 import torch
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import (accuracy_score, f1_score, precision_score,
+                             recall_score)
 
 torch.autograd.set_detect_anomaly(True)
 
@@ -180,7 +181,6 @@ class ModelTrainer(pl.LightningModule):
         optimizer = torch.optim.Adam(self.model.get_params(), lr=self.lr)
         return optimizer
 
-    # TODO:関数を変える
     def loss_function(
         self, output, system_out, system_dicision, crowd_dicision, annotator
     ):

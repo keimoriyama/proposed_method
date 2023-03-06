@@ -25,16 +25,20 @@ def train(config):
     debug = config.debug
     batch_size = config.train.batch_size
 
-    train_df = pd.read_csv("./data/train.csv")
-    validate_df = pd.read_csv("./data/validate.csv")
+    train_df = pd.read_csv("./data/train.csv", index_col=0)
+    validate_df = pd.read_csv("./data/validate.csv", index_col=0)
     train_df["text"] = [ast.literal_eval(d) for d in train_df["text"]]
     train_df["attribute"] = [ast.literal_eval(d) for d in train_df["attribute"]]
     validate_df["text"] = [ast.literal_eval(d) for d in validate_df["text"]]
     validate_df["attribute"] = [ast.literal_eval(d) for d in validate_df["attribute"]]
+
     if debug:
         train_df = train_df[:16]
         validate_df = validate_df[:16]
         config.train.epoch = 5
+
+    train_df = train_df.reset_index()
+    validate_df = validate_df.reset_index()
 
     train_dataset = Dataset(train_df)
     valid_dataset = Dataset(validate_df)
